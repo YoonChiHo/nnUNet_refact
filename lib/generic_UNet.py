@@ -23,8 +23,8 @@ import numpy as np
 #from nnunet.network_architecture.neural_network import SegmentationNetwork
 from lib.neural_network import SegmentationNetwork
 import torch.nn.functional
-
 import torch.nn.functional as F
+
 softmax_helper = lambda x: F.softmax(x, 1)
 
 class InitWeights_He(object):

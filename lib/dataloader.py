@@ -22,6 +22,7 @@ from lib.data_augmentation.downsampling import DownsampleSegForDSTransform3, Dow
 from lib.data_augmentation.pyramid_augmentations import MoveSegAsOneHotToData, \
     ApplyRandomBinaryOperatorTransform, \
     RemoveRandomConnectedComponentFromOneHotEncodingTransform
+from options import default_num_threads
 
 from batchgenerators.dataloading.data_loader import SlimDataLoaderBase #나중에 간단한 코드로 변경필요
 from batchgenerators.transforms.channel_selection_transforms import DataChannelSelectionTransform, \
@@ -40,11 +41,6 @@ except ImportError as ie:
 from batchgenerators.transforms.abstract_transforms import Compose
 from batchgenerators.dataloading.multi_threaded_augmenter import MultiThreadedAugmenter
 
-
-
-
-
-default_num_threads = 8 if 'nnUNet_def_n_proc' not in os.environ else int(os.environ['nnUNet_def_n_proc'])
 
 def unpack_dataset(folder, threads=default_num_threads, key="data"):
     """

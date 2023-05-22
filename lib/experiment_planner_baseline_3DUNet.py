@@ -30,9 +30,7 @@ from lib.generic_UNet import Generic_UNet
 from lib.cropping import get_case_identifier_from_npz
 #from nnunet.training.model_restore import recursive_find_python_class
 from lib.preprocessing import GenericPreprocessor as preprocessor_class
-
-default_num_threads = 8 if 'nnUNet_def_n_proc' not in os.environ else int(os.environ['nnUNet_def_n_proc'])
-default_data_identifier = 'nnUNetData_plans_v2.1'
+from options import default_data_identifier
 
 class ExperimentPlanner(object):
     def __init__(self, folder_with_cropped_data, preprocessed_output_folder):

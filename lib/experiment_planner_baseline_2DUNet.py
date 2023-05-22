@@ -21,8 +21,7 @@ from lib.experiment_planner_baseline_3DUNet import ExperimentPlanner
 from lib.generic_UNet import Generic_UNet
 #from nnunet.paths import *
 import os
-
-default_data_identifier = 'nnUNetData_plans_v2.1'
+from options import default_data_identifier
 
 class ExperimentPlanner2D(ExperimentPlanner):
     def __init__(self, folder_with_cropped_data, preprocessed_output_folder):

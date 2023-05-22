@@ -18,11 +18,9 @@ from multiprocessing import Pool
 import numpy as np
 import pickle
 from lib.cropping import get_patient_identifiers_from_cropped_files
+from options import default_num_threads
 from skimage.morphology import label
 from collections import OrderedDict
-
-default_num_threads = 8 if 'nnUNet_def_n_proc' not in os.environ else int(os.environ['nnUNet_def_n_proc'])
-default_data_identifier = 'nnUNetData_plans_v2.1'
 
 class DatasetAnalyzer(object):
     def __init__(self, folder_with_cropped_data, overwrite=True, num_processes=default_num_threads):

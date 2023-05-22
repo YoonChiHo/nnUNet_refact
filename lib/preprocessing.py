@@ -24,10 +24,7 @@ from scipy.ndimage.interpolation import map_coordinates
 import numpy as np
 from batchgenerators.utilities.file_and_folder_operations import *
 from multiprocessing.pool import Pool
-from typing import Tuple, List
-
-default_num_threads = 8 if 'nnUNet_def_n_proc' not in os.environ else int(os.environ['nnUNet_def_n_proc'])
-RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD = 3  # determines what threshold to use for resampling the low resolution axis
+from options import default_num_threads, RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD
 # separately (with NN)
 
 def get_do_separate_z(spacing, anisotropy_threshold=RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD):

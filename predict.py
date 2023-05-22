@@ -26,8 +26,16 @@ def main():
     # else:
     #     task_name = args.task_name
 
-    assert args.model in ["2d",  "3d_fullres"], "-m must be 2d, 3d_fullres"
+    assert args.network in ["2d",  "3d_fullres"], "-m must be 2d, 3d_fullres"
 
+    # Set Directory
+    model_folder_name = os.path.join(args.checkpoints, args.network, args.task)  
+    #model_folder_name = os.path.join(checkpoint_folder_name, args.network, args.task)
+    print("using model stored in ", model_folder_name)
+    assert os.path.isdir(model_folder_name), "model output folder not found. Expected: %s" % model_folder_name
+
+    output_folder_name = os.path.join(args.output_folder, args.task)  
+    os.makedirs(output_folder_name, exist_ok=True)
 
     # if lowres_segmentations == "None":
     lowres_segmentations = None
@@ -39,6 +47,8 @@ def main():
             fold = [int(i) for i in args.fold]
     elif args.fold == "None":
         fold = None
+    else:
+        fold = args.fold
 
     assert args.all_in_gpu in ['None', 'False', 'True']
     if args.all_in_gpu == "None":
@@ -73,10 +83,6 @@ def main():
     #     trainer = cascade_trainer_class_name
     # else:
 
-    model_folder_name = os.path.join(args.network_training_output_dir, args.model, args.task, args.network_trainer + "__" + args.plans_identifier)
-    print("using model stored in ", model_folder_name)
-    assert os.path.isdir(model_folder_name), "model output folder not found. Expected: %s" % model_folder_name
-
     st = time()
     # predict_from_folder(model_folder_name, args.input_folder, args.output_folder, fold, args.save_npz, args.num_threads_preprocessing,
     #                     args.num_threads_nifti_save, lowres_segmentations, args.part_id, args.num_parts, not args.disable_tta,
@@ -85,9 +91,7 @@ def main():
     #                     step_size=args.step_size, checkpoint_name=args.chk)
 
 
-    #maybe_mkdir_p(output_folder)
-    os.makedirs(args.output_folder, exist_ok=True)
-    shutil.copy(os.path.join(model_folder_name, 'plans.pkl'), args.output_folder)
+    shutil.copy(os.path.join(model_folder_name, 'plans.pkl'), output_folder_name)
 
     assert os.path.isfile(os.path.join(model_folder_name, "plans.pkl")), "Folder with saved model weights must contain a plans.pkl file"
     expected_num_modalities = load_pickle(os.path.join(model_folder_name, "plans.pkl"))['num_modalities']
@@ -95,7 +99,7 @@ def main():
     # check input folder integrity
     case_ids = check_input_folder_and_return_caseIDs(args.input_folder, expected_num_modalities)
 
-    output_files = [os.path.join(args.output_folder, i + ".nii.gz") for i in case_ids]
+    output_files = [os.path.join(output_folder_name, i + ".nii.gz") for i in case_ids]
     all_files = subfiles(args.input_folder, suffix=".nii.gz", join=False, sort=True)
     list_of_lists = [[os.path.join(args.input_folder, i) for i in all_files if i[:len(j)].startswith(j) and
                         len(i) == (len(j) + 12)] for j in case_ids]
@@ -122,7 +126,7 @@ def main():
                         step_size=args.step_size, checkpoint_name=args.chk)
 
     end = time()
-    save_json(end - st, os.path.join(args.output_folder, 'prediction_time.txt'))
+    save_json(end - st, os.path.join(output_folder_name, 'prediction_time.txt'))
 
 def predict_cases(model, list_of_lists, output_filenames, folds, save_npz, num_threads_preprocessing,
                   num_threads_nifti_save, segs_from_prev_stage=None, do_tta=True, mixed_precision=True,
