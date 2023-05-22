@@ -76,7 +76,7 @@ def test_setting():
     parser = argparse.ArgumentParser()
     base_setting(parser)
 
-    parser.add_argument("-i", '--input_folder', default = "/data/1_nnunet_refactoring/nnUNet_raw_data_base/nnUNet_raw_data/Task500_ISLES_ad/imagesTs")#, required=True)
+    parser.add_argument("-i", '--input_folder', default = "/data/1_nnunet_refactoring/nnUNet_refact/Task500_ISLES_ad/imagesTs")#, required=True)
     parser.add_argument('-o', "--output_folder", default = "/data/1_nnunet_refactoring/nnUNet_refact/Results",
                         required=False, help="folder for saving predictions")
     parser.add_argument('-f', '--fold', nargs='+', default='None',
