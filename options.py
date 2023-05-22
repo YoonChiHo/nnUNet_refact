@@ -5,6 +5,7 @@ import os
 def initial_setting():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", default= '/data/1_nnunet_refactoring/nnUNet_preprocessed')#required=True)
+    parser.add_argument("--dataset", default= '/data/1_nnunet_refactoring/nnUNet_preprocessed')#required=True)
     parser.add_argument("--checkpoints", default= '/data/1_nnunet_refactoring/nnUNet_refact/nnUNet_trained_models')#required=True)
     parser.add_argument("--network", default= '2d')#required=True)
     parser.add_argument("--max_epoch", default= 1)#required=True)
@@ -26,11 +27,9 @@ def initial_setting():
 def test_setting():
     #my_output_identifier = "nnUNet"
   
-    default_data_identifier = 'nnUNetData_plans_v2.1'
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", '--input_folder', default = "/data/1_nnunet_refactoring/nnUNet_raw_data_base/nnUNet_raw_data/Task500_ISLES_ad/imagesTs")#, required=True)
-    parser.add_argument('-o', "--output_folder", default = "/data/1_nnunet_refactoring/nnUNet_raw_data_base/nnUNet_raw_data/Task500_ISLES_ad/outputsTs",
+    parser.add_argument('-o', "--output_folder", default = "/data/1_nnunet_refactoring/nnUNet_refact/Results",
                         required=False, help="folder for saving predictions")
     parser.add_argument('-t', '--task', help='task name or task ID, required.',
                         default='Task500_ISLES_ad')#, required=True)
