@@ -59,6 +59,7 @@ def train_setting():
     parser = argparse.ArgumentParser()
     base_setting(parser)
 
+    parser.add_argument("--do_preprocess", default = True)
     parser.add_argument("--max_epoch", default= 1)#required=True)
     parser.add_argument("--i_lr", default= 1e-2)#required=True)
     parser.add_argument("-f", "--fold", default= '0')#required=True)

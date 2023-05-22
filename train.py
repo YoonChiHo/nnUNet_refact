@@ -5,9 +5,6 @@ from lib.trainer import nnUNetTrainer_simple, load_pretrained_weights
 from lib.utils import load_pickle
 from lib.preprocess import preprocess
 
-# Data Preprocess
-preprocess()
-
 # Main Parameter Settings
 args = train_setting().parse_args()
 
@@ -18,6 +15,10 @@ else: fold = int(args.fold)
  
 # pych_Network Validate
 assert args.network in ['2d', '3d_fullres'], "network can only be one of the following: \'2d\',  \'3d_fullres\''"
+
+# Data Preprocess
+if args.do_preprocess:
+    preprocess()    
 
 # Set Directory
 checkpoint_folder_name = os.path.join(args.checkpoints, args.network, args.task)  
