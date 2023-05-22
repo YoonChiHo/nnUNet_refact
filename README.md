@@ -9,3 +9,4 @@ git config --global user.name "YoonChiHo"
 2. 네트워크 관련 Refactoring
 3. transferlearning할수있게 세팅
 4. 2d가 결과 잘 재현되는지 확인
+5. Ensemble 잘 되는지 확인

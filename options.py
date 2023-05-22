@@ -7,7 +7,7 @@ RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD = 3  # determines what threshold to use fo
 
 def base_setting(parser):
     parser.add_argument("-t", "--task", default= 'Task500_ISLES_ad')#required=True)
-    parser.add_argument('--network', help="2d, 3d_fullres. ",default="2d", required=False)
+    parser.add_argument('--network', help="2d, 3d_fullres. ",default="3d_fullres", required=False)
 
     parser.add_argument("--dataset_dir", default= '/data/1_nnunet_refactoring/nnUNet_refact/Dataset')#required=True)
     parser.add_argument("--preprocess_dir", default= '/data/1_nnunet_refactoring/nnUNet_refact/Preprocessed')#required=True)
@@ -80,6 +80,10 @@ def test_setting():
     parser.add_argument("-i", '--input_folder', default = "/data/1_nnunet_refactoring/nnUNet_refact/Task500_ISLES_ad/imagesTs")#, required=True)
     parser.add_argument('-o', "--output_folder", default = "/data/1_nnunet_refactoring/nnUNet_refact/Results",
                         required=False, help="folder for saving predictions")
+    parser.add_argument('-g', "--gt_folder", default = "/data/1_nnunet_refactoring/nnUNet_refact/Task500_ISLES_ad/labelsTs",
+                     required=False, help="folder for saving predictions")
+    parser.add_argument('-l', "--labels", default = [0,1])
+    parser.add_argument('-m', "--metrics", default = ["Dice"])
     parser.add_argument('-f', '--fold', nargs='+', default='None',
                         help="folds to use for prediction. Default is None which means that folds will be detected "
                              "automatically in the model output folder")

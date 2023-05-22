@@ -3,6 +3,10 @@ import os
 import numpy as np
 import json
 import torch
+from time import time, sleep
+from datetime import datetime
+import sys
+
 
 def to_cuda(data, non_blocking=True, gpu_id=0):
     if isinstance(data, list):
@@ -10,6 +14,18 @@ def to_cuda(data, non_blocking=True, gpu_id=0):
     else:
         data = data.cuda(gpu_id, non_blocking=non_blocking)
     return data
+
+def subfiles(folder: str, join: bool = True, prefix: str = None, suffix: str = None, sort: bool = True) -> List[str]:
+    if join:
+        l = os.path.join
+    else:
+        l = lambda x, y: y
+    res = [l(folder, i) for i in os.listdir(folder) if os.path.isfile(os.path.join(folder, i))
+           and (prefix is None or i.startswith(prefix))
+           and (suffix is None or i.endswith(suffix))]
+    if sort:
+        res.sort()
+    return res
 
 def maybe_to_torch(d):
     if isinstance(d, list):
@@ -89,10 +105,6 @@ def convert_to_npy(args):
     if not os.path.isfile(npz_file[:-3] + "npy"):
         a = np.load(npz_file)[key]
         np.save(npz_file[:-3] + "npy", a)
-
-from time import time, sleep
-from datetime import datetime
-import sys
 
 def print_to_log_file(log_file,output_folder, *args, also_print_to_console=True, add_timestamp=True):
 

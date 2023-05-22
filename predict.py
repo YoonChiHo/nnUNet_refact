@@ -16,6 +16,8 @@ from lib.utils import save_json, load_pickle
 from lib.trainer import nnUNetTrainer_simple
 from lib.segmentation_export import save_segmentation_nifti_from_softmax 
 
+from nnunet.evaluation.evaluator import evaluate_folder
+
 def main():
     #Main Parameter Settings
     args = test_setting().parse_args()
@@ -127,6 +129,9 @@ def main():
 
     end = time()
     save_json(end - st, os.path.join(output_folder_name, 'prediction_time.txt'))
+
+    if args.gt_folder != None:
+        evaluate_folder(args.gt_folder, output_folder_name, args.l, args.metrics)
 
 def predict_cases(model, list_of_lists, output_filenames, folds, save_npz, num_threads_preprocessing,
                   num_threads_nifti_save, segs_from_prev_stage=None, do_tta=True, mixed_precision=True,
