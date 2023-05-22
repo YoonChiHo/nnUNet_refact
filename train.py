@@ -15,7 +15,7 @@ os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = args.gpus # "0, 1, 2, 3"
 if args.fold == 'all': fold = args.fold
 else: fold = int(args.fold)
-
+ 
 # pych_Network Validate
 assert args.network in ['2d', '3d_fullres'], "network can only be one of the following: \'2d\',  \'3d_fullres\''"
 
