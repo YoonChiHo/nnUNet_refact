@@ -1,6 +1,14 @@
 import numpy as np
 from copy import deepcopy
+import os
+import shutil
+import json
 
+from lib.cropping import ImageCropper
+
+default_num_threads = 8 if 'nnUNet_def_n_proc' not in os.environ else int(os.environ['nnUNet_def_n_proc'])
+RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD = 3  # determines what threshold to use for resampling the low resolution axis
+# separately (with NN)
 def get_pool_and_conv_props_poolLateV2(patch_size, min_feature_map_size, max_numpool, spacing):
     """
 
@@ -135,3 +143,37 @@ def get_network_numpool(patch_size, maxpool_cap=999, min_feature_map_size=4):
     network_numpool_per_axis = np.floor([np.log(i / min_feature_map_size) / np.log(2) for i in patch_size]).astype(int)
     network_numpool_per_axis = [min(i, maxpool_cap) for i in network_numpool_per_axis]
     return network_numpool_per_axis
+
+def crop(task_string, nnUNet_cropped_data, nnUNet_raw_data, override=False, num_threads=default_num_threads):
+    cropped_out_dir = os.path.join(nnUNet_cropped_data, task_string)
+    #maybe_mkdir_p(cropped_out_dir)
+    os.makedirs(cropped_out_dir, exist_ok=True)
+    if override and os.path.isdir(cropped_out_dir):
+        shutil.rmtree(cropped_out_dir)
+        #maybe_mkdir_p(cropped_out_dir)
+        os.makedirs(cropped_out_dir, exist_ok=True)
+
+    splitted_4d_output_dir_task = os.path.join(nnUNet_raw_data, task_string)
+    lists, _ = create_lists_from_splitted_dataset(splitted_4d_output_dir_task)
+
+    imgcrop = ImageCropper(num_threads, cropped_out_dir)
+    imgcrop.run_cropping(lists, overwrite_existing=override)
+    shutil.copy(os.path.join(nnUNet_raw_data, task_string, "dataset.json"), cropped_out_dir)
+
+    
+def create_lists_from_splitted_dataset(base_folder_splitted):
+    lists = []
+
+    json_file = os.path.join(base_folder_splitted, "dataset.json")
+    with open(json_file) as jsn:
+        d = json.load(jsn)
+        training_files = d['training']
+    num_modalities = len(d['modality'].keys())
+    for tr in training_files:
+        cur_pat = []
+        for mod in range(num_modalities):
+            cur_pat.append(os.path.join(base_folder_splitted, "imagesTr", tr['image'].split("/")[-1][:-7] +
+                                "_%04.0d.nii.gz" % mod))
+        cur_pat.append(os.path.join(base_folder_splitted, "labelsTr", tr['label'].split("/")[-1]))
+        lists.append(cur_pat)
+    return lists, {int(i): d['modality'][str(i)] for i in d['modality'].keys()}

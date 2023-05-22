@@ -4,7 +4,8 @@ from options import preprocess_setting
 from lib.utils import load_json
 from lib.experiment_planner_baseline_3DUNet_v21 import ExperimentPlanner3D_v21 as planner_3d
 from lib.experiment_planner_baseline_2DUNet_v21 import ExperimentPlanner2D_v21 as planner_2d
-#from nnunet.experiment_planning.DatasetAnalyzer import DatasetAnalyzer
+from lib.DatasetAnalyzer import DatasetAnalyzer
+from lib.utils_preprocess import crop
 import shutil
 
 #Main Parameter Settings
@@ -26,6 +27,7 @@ args = preprocess_setting().parse_args()
 #tasks = [args.task]
 
 print("\n\n\n", args.task)
+crop(args.task, args.cropped_out_dir, args.nnUNet_raw_data , False, args.tf)
 cropped_out_dir = os.path.join(args.cropped_out_dir, args.task)
 preprocessing_output_dir_this_task = os.path.join(args.dataset, args.task)
 #splitted_4d_output_dir_task = os.path.join(nnUNet_raw_data, t)
@@ -35,8 +37,8 @@ preprocessing_output_dir_this_task = os.path.join(args.dataset, args.task)
 dataset_json = load_json(os.path.join(cropped_out_dir, 'dataset.json'))
 modalities = list(dataset_json["modality"].values())
 collect_intensityproperties = True if (("CT" in modalities) or ("ct" in modalities)) else False
-#dataset_analyzer = DatasetAnalyzer(cropped_out_dir, overwrite=False, num_processes=args.tf)  # this class creates the fingerprint
-###_ = dataset_analyzer.analyze_dataset(collect_intensityproperties)  # this will write output files that will be used by the ExperimentPlanner
+dataset_analyzer = DatasetAnalyzer(cropped_out_dir, overwrite=False, num_processes=args.tf)  # this class creates the fingerprint
+_ = dataset_analyzer.analyze_dataset(collect_intensityproperties)  # this will write output files that will be used by the ExperimentPlanner
 
 
 #maybe_mkdir_p(preprocessing_output_dir_this_task)
