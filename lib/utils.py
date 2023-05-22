@@ -74,6 +74,11 @@ def save_pickle(obj, file: str, mode: str = 'wb') -> None:
 def save_json(obj, file: str, indent: int = 4, sort_keys: bool = True) -> None:
     with open(file, 'w') as f:
         json.dump(obj, f, sort_keys=sort_keys, indent=indent)
+        
+def load_json(file: str):
+    with open(file, 'r') as f:
+        a = json.load(f)
+    return a
       
 def convert_to_npy(args):
     if not isinstance(args, tuple):
@@ -124,3 +129,4 @@ def print_to_log_file(log_file,output_folder, *args, also_print_to_console=True,
     if also_print_to_console:
         print(*args)
     return log_file
+
