@@ -12,19 +12,19 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-from collections import OrderedDict
-from copy import deepcopy
 
+from options import default_num_threads, RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD
 from lib.cropping import get_case_identifier_from_npz, ImageCropper
 
 from batchgenerators.augmentations.utils import resize_segmentation
-#from nnunet.configuration import default_num_threads, RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD
+
 from skimage.transform import resize
 from scipy.ndimage.interpolation import map_coordinates
 import numpy as np
 from batchgenerators.utilities.file_and_folder_operations import *
 from multiprocessing.pool import Pool
-from options import default_num_threads, RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD
+from collections import OrderedDict
+from copy import deepcopy
 # separately (with NN)
 
 def get_do_separate_z(spacing, anisotropy_threshold=RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD):

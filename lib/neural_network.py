@@ -12,17 +12,15 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from lib.utils import to_cuda, no_op, maybe_to_torch
+
+from batchgenerators.augmentations.utils import pad_nd_image
 
 import numpy as np
-from batchgenerators.augmentations.utils import pad_nd_image
-#from nnunet.utilities.random_stuff import no_op
-#from nnunet.utilities.to_torch import maybe_to_torch
-from lib.utils import to_cuda, no_op, maybe_to_torch
 from torch import nn
 import torch
 from scipy.ndimage.filters import gaussian_filter
 from typing import Union, Tuple, List
-
 from torch.cuda.amp import autocast
 
 

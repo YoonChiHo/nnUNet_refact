@@ -12,10 +12,12 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-import os
-from copy import deepcopy
+from lib.data_augmentation.custom_transforms import Convert3DTo2DTransform, Convert2DTo3DTransform, \
+    MaskTransform, ConvertSegmentationToRegionsTransform
+from lib.data_augmentation.pyramid_augmentations import MoveSegAsOneHotToData, \
+    ApplyRandomBinaryOperatorTransform, \
+    RemoveRandomConnectedComponentFromOneHotEncodingTransform
 
-import numpy as np
 from batchgenerators.dataloading.multi_threaded_augmenter import MultiThreadedAugmenter
 from batchgenerators.transforms.abstract_transforms import Compose
 from batchgenerators.transforms.channel_selection_transforms import DataChannelSelectionTransform, \
@@ -24,12 +26,10 @@ from batchgenerators.transforms.color_transforms import GammaTransform
 from batchgenerators.transforms.spatial_transforms import SpatialTransform, MirrorTransform
 from batchgenerators.transforms.utility_transforms import RemoveLabelTransform, RenameTransform, NumpyToTensor
 
-from lib.data_augmentation.custom_transforms import Convert3DTo2DTransform, Convert2DTo3DTransform, \
-    MaskTransform, ConvertSegmentationToRegionsTransform
-from lib.data_augmentation.pyramid_augmentations import MoveSegAsOneHotToData, \
-    ApplyRandomBinaryOperatorTransform, \
-    RemoveRandomConnectedComponentFromOneHotEncodingTransform
 #from nnunet.utilities.set_n_proc_DA import get_allowed_n_proc_DA
+import numpy as np
+import os
+from copy import deepcopy
 import subprocess
 
 

@@ -1,11 +1,7 @@
 import numpy as np
 from copy import deepcopy
 import os
-import shutil
 import json
-
-from lib.cropping import ImageCropper
-from options import default_num_threads
 
 # separately (with NN)
 def get_pool_and_conv_props_poolLateV2(patch_size, min_feature_map_size, max_numpool, spacing):
@@ -142,22 +138,6 @@ def get_network_numpool(patch_size, maxpool_cap=999, min_feature_map_size=4):
     network_numpool_per_axis = np.floor([np.log(i / min_feature_map_size) / np.log(2) for i in patch_size]).astype(int)
     network_numpool_per_axis = [min(i, maxpool_cap) for i in network_numpool_per_axis]
     return network_numpool_per_axis
-
-def crop(task_string, cropped_out_dir, dataset_dir, override=False, num_threads=default_num_threads):
-    #cropped_out_dir = os.path.join(nnUNet_cropped_data, task_string)
-    #maybe_mkdir_p(cropped_out_dir)
-    os.makedirs(cropped_out_dir, exist_ok=True)
-    if override and os.path.isdir(cropped_out_dir):
-        shutil.rmtree(cropped_out_dir)
-        #maybe_mkdir_p(cropped_out_dir)
-        os.makedirs(cropped_out_dir, exist_ok=True)
-
-    splitted_4d_output_dir_task = os.path.join(dataset_dir, task_string)
-    lists, _ = create_lists_from_splitted_dataset(splitted_4d_output_dir_task)
-
-    imgcrop = ImageCropper(num_threads, cropped_out_dir)
-    imgcrop.run_cropping(lists, overwrite_existing=override)
-    shutil.copy(os.path.join(dataset_dir, task_string, "dataset.json"), cropped_out_dir)
 
     
 def create_lists_from_splitted_dataset(base_folder_splitted):

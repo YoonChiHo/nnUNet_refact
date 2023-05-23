@@ -13,6 +13,9 @@
 #    limitations under the License.
 
 
+from lib.metrics import ConfusionMatrix, ALL_METRICS
+from batchgenerators.utilities.file_and_folder_operations import save_json, subfiles
+
 import collections
 import inspect
 import json
@@ -22,8 +25,7 @@ from multiprocessing.pool import Pool
 import numpy as np
 import pandas as pd
 import SimpleITK as sitk
-from lib.metrics import ConfusionMatrix, ALL_METRICS
-from batchgenerators.utilities.file_and_folder_operations import save_json, subfiles, join
+import os
 from collections import OrderedDict
 
 
@@ -455,8 +457,8 @@ def evaluate_folder(folder_with_gts: str, folder_with_predictions: str, labels: 
     files_pred = subfiles(folder_with_predictions, suffix=".nii.gz", join=False)
     assert all([i in files_pred for i in files_gt]), "files missing in folder_with_predictions"
     assert all([i in files_gt for i in files_pred]), "files missing in folder_with_gts"
-    test_ref_pairs = [(join(folder_with_predictions, i), join(folder_with_gts, i)) for i in files_pred]
-    res = aggregate_scores(test_ref_pairs, json_output_file=join(folder_with_predictions, "summary.json"),
+    test_ref_pairs = [(os.path.join(folder_with_predictions, i), os.path.join(folder_with_gts, i)) for i in files_pred]
+    res = aggregate_scores(test_ref_pairs, json_output_file=os.path.join(folder_with_predictions, "summary.json"),
                            num_threads=8, labels=labels, **metric_kwargs)
     return res
 

@@ -2,8 +2,9 @@ import os
 
 from options import train_setting
 from lib.trainer import nnUNetTrainer_simple, load_pretrained_weights
-from lib.utils import load_pickle
 from lib.preprocess import preprocess
+
+from batchgenerators.utilities.file_and_folder_operations import load_pickle
 
 # Main Parameter Settings
 args = train_setting().parse_args()
@@ -17,6 +18,7 @@ else: fold = int(args.fold)
 assert args.network in ['2d', '3d_fullres'], "network can only be one of the following: \'2d\',  \'3d_fullres\''"
 
 # Data Preprocess
+preprocess_folder_name = os.path.join(args.checkpoints, args.network, args.task)  
 if args.do_preprocess:
     preprocess()    
 

@@ -13,15 +13,13 @@
 #    limitations under the License.
 
 
-import numpy as np
-from lib.utils_preprocess import get_pool_and_conv_props
-#from nnunet.experiment_planning.experiment_planner_baseline_3DUNet import ExperimentPlanner
+from lib.utils_preprocess import get_pool_and_conv_props_poolLateV2
 from lib.experiment_planner_baseline_3DUNet import ExperimentPlanner
-#from nnunet.network_architecture.generic_UNet import Generic_UNet
 from lib.generic_UNet import Generic_UNet
-#from nnunet.paths import *
-import os
 from options import default_data_identifier
+
+import numpy as np
+import os
 
 class ExperimentPlanner2D(ExperimentPlanner):
     def __init__(self, folder_with_cropped_data, preprocessed_output_folder):

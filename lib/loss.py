@@ -12,13 +12,13 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from lib.utils import sum_tensor
+from lib.generic_UNet import softmax_helper
 
 import torch
-from lib.utils import sum_tensor
 from torch import nn
 import numpy as np
 from torch import nn, Tensor
-from lib.generic_UNet import softmax_helper
 
 ### Deep supervision
 class MultipleOutputLoss2(nn.Module):

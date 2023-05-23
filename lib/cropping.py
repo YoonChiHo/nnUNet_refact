@@ -12,13 +12,31 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from batchgenerators.utilities.file_and_folder_operations import *
+
 import SimpleITK as sitk
 import numpy as np
 import shutil
-from batchgenerators.utilities.file_and_folder_operations import *
 from multiprocessing import Pool
 from collections import OrderedDict
+from lib.utils_preprocess import create_lists_from_splitted_dataset
+from options import default_num_threads
 
+def crop(task_string, cropped_out_dir, dataset_dir, override=False, num_threads=default_num_threads):
+    #cropped_out_dir = os.path.join(nnUNet_cropped_data, task_string)
+    #maybe_mkdir_p(cropped_out_dir)
+    os.makedirs(cropped_out_dir, exist_ok=True)
+    if override and os.path.isdir(cropped_out_dir):
+        shutil.rmtree(cropped_out_dir)
+        #maybe_mkdir_p(cropped_out_dir)
+        os.makedirs(cropped_out_dir, exist_ok=True)
+
+    splitted_4d_output_dir_task = os.path.join(dataset_dir, task_string)
+    lists, _ = create_lists_from_splitted_dataset(splitted_4d_output_dir_task)
+
+    imgcrop = ImageCropper(num_threads, cropped_out_dir)
+    imgcrop.run_cropping(lists, overwrite_existing=override)
+    shutil.copy(os.path.join(dataset_dir, task_string, "dataset.json"), cropped_out_dir)
 
 def create_nonzero_mask(data):
     from scipy.ndimage import binary_fill_holes

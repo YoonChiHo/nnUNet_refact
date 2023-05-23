@@ -11,26 +11,18 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+from options import default_data_identifier
+from lib.utils_preprocess import get_pool_and_conv_props_poolLateV2
+from lib.generic_UNet import Generic_UNet
+from lib.cropping import get_case_identifier_from_npz
+from lib.preprocessing import GenericPreprocessor as preprocessor_class
+
+from batchgenerators.utilities.file_and_folder_operations import *
 
 import shutil
 from collections import OrderedDict
 from copy import deepcopy
-
-#import nnunet
 import numpy as np
-from batchgenerators.utilities.file_and_folder_operations import *
-#from nnunet.configuration import default_num_threads
-#from nnunet.experiment_planning.DatasetAnalyzer import DatasetAnalyzer
-#from nnunet.experiment_planning.common_utils import get_pool_and_conv_props_poolLateV2
-from lib.utils_preprocess import get_pool_and_conv_props_poolLateV2
-#from nnunet.experiment_planning.utils import create_lists_from_splitted_dataset
-#from nnunet.network_architecture.generic_UNet import Generic_UNet
-from lib.generic_UNet import Generic_UNet
-#from nnunet.paths import *
-from lib.cropping import get_case_identifier_from_npz
-#from nnunet.training.model_restore import recursive_find_python_class
-from lib.preprocessing import GenericPreprocessor as preprocessor_class
-from options import default_data_identifier
 
 class ExperimentPlanner(object):
     def __init__(self, folder_with_cropped_data, preprocessed_output_folder):

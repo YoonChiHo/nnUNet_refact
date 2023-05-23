@@ -13,16 +13,12 @@
 #    limitations under the License.
 
 
+from lib.neural_network import SegmentationNetwork
+
 from copy import deepcopy
-#from nnunet.utilities.nd_softmax import softmax_helper
-#from lib.generic_UNet import softmax_helper
 from torch import nn
 import torch
 import numpy as np
-#from nnunet.network_architecture.initialization import InitWeights_He
-#from nnunet.network_architecture.neural_network import SegmentationNetwork
-from lib.neural_network import SegmentationNetwork
-import torch.nn.functional
 import torch.nn.functional as F
 
 softmax_helper = lambda x: F.softmax(x, 1)
@@ -174,7 +170,7 @@ class Upsample(nn.Module):
         self.size = size
 
     def forward(self, x):
-        return nn.functional.interpolate(x, size=self.size, scale_factor=self.scale_factor, mode=self.mode,
+        return F.interpolate(x, size=self.size, scale_factor=self.scale_factor, mode=self.mode,
                                          align_corners=self.align_corners)
 
 

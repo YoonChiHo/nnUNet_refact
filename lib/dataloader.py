@@ -1,9 +1,12 @@
 
+from lib.utils import get_allowed_n_proc_DA, print_to_log_file, convert_to_npy
+
+from batchgenerators.utilities.file_and_folder_operations import load_pickle, save_pickle 
+
 from collections import OrderedDict
 import numpy as np
 import os
 from copy import deepcopy
-from lib.utils import load_pickle, save_pickle, get_allowed_n_proc_DA, print_to_log_file, convert_to_npy
 from sklearn.model_selection import KFold
 from multiprocessing import Pool
 from typing import List

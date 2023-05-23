@@ -12,12 +12,13 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-from batchgenerators.utilities.file_and_folder_operations import *
-from multiprocessing import Pool
+from lib.cropping import get_patient_identifiers_from_cropped_files
 
+from batchgenerators.utilities.file_and_folder_operations import *
+
+from multiprocessing import Pool
 import numpy as np
 import pickle
-from lib.cropping import get_patient_identifiers_from_cropped_files
 from options import default_num_threads
 from skimage.morphology import label
 from collections import OrderedDict

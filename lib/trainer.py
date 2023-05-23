@@ -15,12 +15,13 @@ from typing import Tuple, List
 #from nnunet.utilities.nd_softmax import softmax_helper
 
 from lib.loss import DC_and_CE_loss #가능하면 세팅가져와 사용할수있게 간단히
-from lib.generic_UNet import InitWeights_He, softmax_helper
+from lib.generic_UNet import Generic_UNet, InitWeights_He, softmax_helper #제일 수정해야할것, 일단 보류
 from lib.dataloader import load_dataset, setup_DA_params, do_split, DataLoader3D, DataLoader2D, unpack_dataset, get_moreDA_augmentation
-from lib.utils import load_pickle, save_pickle, print_to_log_file, save_json, to_cuda, sum_tensor, maybe_to_torch
 from lib.preprocessing import GenericPreprocessor
+from lib.utils import print_to_log_file, to_cuda, sum_tensor, maybe_to_torch
 
-from nnunet.network_architecture.generic_UNet import Generic_UNet #제일 수정해야할것, 일단 보류
+from batchgenerators.utilities.file_and_folder_operations import load_pickle, save_pickle, save_json
+
 
 class MultipleOutputLoss2(nn.Module):
     def __init__(self, loss, weight_factors=None):

@@ -11,15 +11,12 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-from copy import deepcopy
 
 from lib.utils_preprocess import get_pool_and_conv_props
-#from nnunet.experiment_planning.common_utils import get_pool_and_conv_props
-#from nnunet.experiment_planning.experiment_planner_baseline_2DUNet import ExperimentPlanner2D
 from lib.experiment_planner_baseline_2DUNet import ExperimentPlanner2D
-#from nnunet.network_architecture.generic_UNet import Generic_UNet
 from lib.generic_UNet import Generic_UNet
-#from nnunet.paths import *
+
+from copy import deepcopy
 import numpy as np
 import os
 
