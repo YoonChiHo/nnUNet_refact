@@ -3,15 +3,22 @@ import os
 
 default_num_threads = 8 if 'nnUNet_def_n_proc' not in os.environ else int(os.environ['nnUNet_def_n_proc'])
 default_data_identifier = 'nnUNetData_plans_v2.1'
+# our setting
+default_output_folder = '/data/1_nnunet_refactoring/nnUNet_refact/Results'
+default_dataset_folder = '/data/1_nnunet_refactoring/nnUNet_refact/Dataset'
+default_preprocessed_folder = '/data/1_nnunet_refactoring/nnUNet_refact/Preprocessed'
+default_checkpoints_folder = '/data/1_nnunet_refactoring/nnUNet_refact/Checkpoints'
+
 RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD = 3  # determines what threshold to use for resampling the low resolution axis
 
 def base_setting(parser):
     parser.add_argument("-t", "--task", default= 'Task500_ISLES_ad')#required=True)
-    parser.add_argument('--network', help="2d, 3d_fullres. ",default="3d_fullres", required=False)
+    parser.add_argument('--network', help="2d, 3d_fullres. ",default="2d", required=False)
 
-    parser.add_argument("--dataset_dir", default= '/data/1_nnunet_refactoring/nnUNet_refact/Dataset')#required=True)
-    parser.add_argument("--preprocess_dir", default= '/data/1_nnunet_refactoring/nnUNet_refact/Preprocessed')#required=True)
-    parser.add_argument("--checkpoints", default= '/data/1_nnunet_refactoring/nnUNet_refact/Checkpoints')#required=True)
+    parser.add_argument("--default_dataset_folder", default= f'{default_dataset_folder}')#required=True)
+    parser.add_argument("--default_preprocessed_folder", default= f'{default_preprocessed_folder}')#required=True)
+    parser.add_argument("--default_checkpoints_folder", default= f'{default_checkpoints_folder}')#required=True)
+    parser.add_argument("--default_output_folder", default= f'{default_output_folder}')#required=True)
     parser.add_argument('-tr', '--network_trainer',required=False,default='nnUNetTrainerV2')
     parser.add_argument("--plans_identifier", default='nnUNetPlansv2.1') 
 
@@ -77,14 +84,13 @@ def test_setting():
     parser = argparse.ArgumentParser()
     base_setting(parser)
 
-    parser.add_argument("-i", '--input_folder', default = "/data/1_nnunet_refactoring/nnUNet_refact/Dataset/Task500_ISLES_ad/imagesTs")#, required=True)
-    parser.add_argument('-o', "--output_folder", default = "/data/1_nnunet_refactoring/nnUNet_refact/Results",
-                        required=False, help="folder for saving predictions")
-    parser.add_argument('-g', "--gt_folder", default = "/data/1_nnunet_refactoring/nnUNet_refact/Dataset/Task500_ISLES_ad/labelsTs",
+    parser.add_argument("-i", '--input_name', default = "imagesTs")#, required=True)
+    parser.add_argument('-o', "--output_name", default = "result_2d", required=False, help="folder for saving predictions")
+    parser.add_argument('-g', "--gt_name", default = "labelsTs",
                      required=False, help="folder for saving predictions")
     parser.add_argument('-l', "--labels", default = [0, 1])
 #     parser.add_argument('-m', "--metrics", default = ["Dice"])
-    parser.add_argument('-f', '--fold', nargs='+', default='None',
+    parser.add_argument('-f', '--fold', nargs='+', default='None', 
                         help="folds to use for prediction. Default is None which means that folds will be detected "
                              "automatically in the model output folder")
 
@@ -92,10 +98,10 @@ def test_setting():
                         help="Trainer class name used for predicting the 3D full resolution U-Net part of the cascade."
                              "Default is %s" % "nnUNetTrainerV2CascadeFullRes", required=False,
                         default="nnUNetTrainerV2CascadeFullRes")
-    parser.add_argument('-z', '--save_npz', required=False, action='store_true',
-                        help="use this if you want to ensemble these predictions with those of other models. Softmax "
-                             "probabilities will be saved as compressed numpy arrays in output_folder and can be "
-                             "merged between output_folders with nnUNet_ensemble_predictions")
+    parser.add_argument('-z', '--save_npz', default=True)#required=False, action='store_true',
+    #                     help="use this if you want to ensemble these predictions with those of other models. Softmax "
+    #                          "probabilities will be saved as compressed numpy arrays in output_folder and can be "
+    #                         "merged between output_folders with nnUNet_ensemble_predictions")
     # parser.add_argument('-l', '--lowres_segmentations', required=False, default='None',
     #                     help="if model is the highres stage of the cascade then you can use this folder to provide "
     #                          "predictions from the low resolution 3D U-Net. If this is left at default, the "
@@ -132,5 +138,32 @@ def test_setting():
                         help='Predictions are done with mixed precision by default. This improves speed and reduces '
                              'the required vram. If you want to disable mixed precision you can set this flag. Note '
                              'that this is not recommended (mixed precision is ~2x faster!)')
+    
+    return parser
+
+
+def merge_setting():
+    parser = argparse.ArgumentParser()
+    base_setting(parser)
+
+#     parser = argparse.ArgumentParser(description="This script will merge predictions (that were prdicted with the "
+#                                                  "-npz option!). You need to specify a postprocessing file so that "
+#                                                  "we know here what postprocessing must be applied. Failing to do so "
+#                                                  "will disable postprocessing")
+    parser.add_argument('-i', '--input_list', nargs='+', default = ['result_2d','result_3d'], help="list of folders to merge. All folders must contain npz "
+                                                           "files")#, required=True)
+    parser.add_argument('-o', '--output_name', default = 'result_union' )#help="where to save the results", required=True, type=str)
+    parser.add_argument('-g', "--gt_name", default = "labelsTs",
+                     required=False, help="folder for saving predictions")
+    parser.add_argument('-l', "--labels", default = [0, 1])
+    parser.add_argument('-m', '--method', default = 'union', help="merge method [merge, union]")
+    parser.add_argument('-th', '--threads', help="number of threads used to saving niftis", required=False, default=2,
+                        type=int)
+    parser.add_argument('-pp', '--postprocessing_file', help="path to the file where the postprocessing configuration "
+                                                             "is stored. If this is not provided then no postprocessing "
+                                                             "will be made. It is strongly recommended to provide the "
+                                                             "postprocessing file!",
+                        required=False, type=str, default=None)
+    parser.add_argument('--npz', action="store_true", required=False, help="stores npz and pkl")
     
     return parser

@@ -33,10 +33,10 @@ def preprocess():
     print("\n\n\n", args.task)
         #parser.add_argument("--cropped_out_dir", default= '/data/1_nnunet_refactoring/nnUNet_raw_data_base/nnUNet_cropped_data')#required=True)
 
-    cropped_out_dir = os.path.join(args.preprocess_dir, args.task, 'cropped_data')
-    crop(args.task, cropped_out_dir, args.dataset_dir , False, args.tf)
+    cropped_out_dir = os.path.join(args.default_preprocessed_folder, args.task, 'cropped_data')
+    crop(args.task, cropped_out_dir, args.default_dataset_folder , False, args.tf)
     #cropped_out_dir = os.path.join(cropped_out_dir, args.task)
-    preprocessing_output_dir_this_task = os.path.join(args.preprocess_dir, args.task)
+    preprocessing_output_dir_this_task = os.path.join(args.default_preprocessed_folder, args.task)
     #splitted_4d_output_dir_task = os.path.join(nnUNet_raw_data, t)
     #lists, modalities = create_lists_from_splitted_dataset(splitted_4d_output_dir_task)
 
@@ -52,7 +52,7 @@ def preprocess():
     os.makedirs(preprocessing_output_dir_this_task, exist_ok=True)
 
     shutil.copy(os.path.join(cropped_out_dir, "dataset_properties.pkl"), preprocessing_output_dir_this_task)
-    shutil.copy(os.path.join(args.dataset_dir, args.task, "dataset.json"), preprocessing_output_dir_this_task)
+    shutil.copy(os.path.join(args.default_dataset_folder, args.task, "dataset.json"), preprocessing_output_dir_this_task)
 
     threads = (args.tl, args.tf)
 
