@@ -1,5 +1,12 @@
 
 from lib.utils import get_allowed_n_proc_DA, print_to_log_file, convert_to_npy
+from lib.data_augmentation.custom_transforms import Convert3DTo2DTransform, Convert2DTo3DTransform, \
+    MaskTransform, ConvertSegmentationToRegionsTransform
+from lib.data_augmentation.default_data_augmentation import default_3D_augmentation_params
+from lib.data_augmentation.downsampling import DownsampleSegForDSTransform3, DownsampleSegForDSTransform2
+from lib.data_augmentation.pyramid_augmentations import MoveSegAsOneHotToData, \
+    ApplyRandomBinaryOperatorTransform, \
+    RemoveRandomConnectedComponentFromOneHotEncodingTransform
 
 from batchgenerators.utilities.file_and_folder_operations import load_pickle, save_pickle 
 
@@ -10,21 +17,6 @@ from copy import deepcopy
 from sklearn.model_selection import KFold
 from multiprocessing import Pool
 from typing import List
-
-# from nnunet.training.data_augmentation.custom_transforms import Convert3DTo2DTransform, Convert2DTo3DTransform, \
-#     MaskTransform, ConvertSegmentationToRegionsTransform
-# from nnunet.training.data_augmentation.default_data_augmentation import default_3D_augmentation_params
-# from nnunet.training.data_augmentation.downsampling import DownsampleSegForDSTransform3, DownsampleSegForDSTransform2
-# from nnunet.training.data_augmentation.pyramid_augmentations import MoveSegAsOneHotToData, \
-#     ApplyRandomBinaryOperatorTransform, \
-#     RemoveRandomConnectedComponentFromOneHotEncodingTransform
-from lib.data_augmentation.custom_transforms import Convert3DTo2DTransform, Convert2DTo3DTransform, \
-    MaskTransform, ConvertSegmentationToRegionsTransform
-from lib.data_augmentation.default_data_augmentation import default_3D_augmentation_params
-from lib.data_augmentation.downsampling import DownsampleSegForDSTransform3, DownsampleSegForDSTransform2
-from lib.data_augmentation.pyramid_augmentations import MoveSegAsOneHotToData, \
-    ApplyRandomBinaryOperatorTransform, \
-    RemoveRandomConnectedComponentFromOneHotEncodingTransform
 from options import default_num_threads
 
 from batchgenerators.dataloading.data_loader import SlimDataLoaderBase #나중에 간단한 코드로 변경필요

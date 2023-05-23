@@ -13,9 +13,9 @@
 #    limitations under the License.
 
 
-from lib.utils_preprocess import get_pool_and_conv_props
-from lib.experiment_planner_baseline_3DUNet import ExperimentPlanner
-from lib.generic_UNet import Generic_UNet
+from lib.preprocess.utils_preprocess import get_pool_and_conv_props
+from lib.preprocess.experiment_planner_baseline_3DUNet import ExperimentPlanner
+from lib.train.generic_UNet import Generic_UNet
 
 import numpy as np
 from copy import deepcopy

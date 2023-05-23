@@ -13,7 +13,7 @@
 #    limitations under the License.
 
 
-from lib.neural_network import SegmentationNetwork
+from lib.train.neural_network import SegmentationNetwork
 
 from copy import deepcopy
 from torch import nn

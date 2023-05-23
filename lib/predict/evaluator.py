@@ -13,7 +13,8 @@
 #    limitations under the License.
 
 
-from lib.metrics import ConfusionMatrix, ALL_METRICS
+from lib.predict.metrics import ConfusionMatrix, ALL_METRICS
+
 from batchgenerators.utilities.file_and_folder_operations import save_json, subfiles
 
 import collections

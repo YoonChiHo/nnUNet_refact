@@ -14,7 +14,7 @@
 
 
 from options import default_num_threads, RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD
-from lib.cropping import get_case_identifier_from_npz, ImageCropper
+from lib.preprocess.cropping import get_case_identifier_from_npz, ImageCropper
 
 from batchgenerators.augmentations.utils import resize_segmentation
 

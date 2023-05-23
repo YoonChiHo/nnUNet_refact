@@ -1,6 +1,6 @@
 from options import test_setting
-from lib.evaluator import evaluate_folder
-from lib.predict_cases import predict_cases, check_input_folder_and_return_caseIDs
+from lib.predict.predict_cases import predict_cases, check_input_folder_and_return_caseIDs
+from lib.predict.evaluator import evaluate_folder
 
 from batchgenerators.utilities.file_and_folder_operations import subfiles, save_json, load_pickle
 

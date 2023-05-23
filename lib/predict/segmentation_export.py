@@ -12,10 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-
-
-
-from lib.preprocessing import get_lowres_axis, get_do_separate_z, resample_data_or_seg #re
+from lib.preprocess.preprocessing import get_lowres_axis, get_do_separate_z, resample_data_or_seg #re
 
 from batchgenerators.augmentations.utils import resize_segmentation
 from batchgenerators.utilities.file_and_folder_operations import *

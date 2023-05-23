@@ -12,6 +12,8 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from lib.preprocess.utils_preprocess import create_lists_from_splitted_dataset
+
 from batchgenerators.utilities.file_and_folder_operations import *
 
 import SimpleITK as sitk
@@ -19,7 +21,6 @@ import numpy as np
 import shutil
 from multiprocessing import Pool
 from collections import OrderedDict
-from lib.utils_preprocess import create_lists_from_splitted_dataset
 from options import default_num_threads
 
 def crop(task_string, cropped_out_dir, dataset_dir, override=False, num_threads=default_num_threads):

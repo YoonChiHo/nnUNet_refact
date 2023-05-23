@@ -12,9 +12,9 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-from lib.utils_preprocess import get_pool_and_conv_props
-from lib.experiment_planner_baseline_2DUNet import ExperimentPlanner2D
-from lib.generic_UNet import Generic_UNet
+from lib.preprocess.utils_preprocess import get_pool_and_conv_props
+from lib.preprocess.experiment_planner_baseline_2DUNet import ExperimentPlanner2D
+from lib.train.generic_UNet import Generic_UNet
 
 from copy import deepcopy
 import numpy as np

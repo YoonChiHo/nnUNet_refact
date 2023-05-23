@@ -12,7 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-from lib.cropping import get_patient_identifiers_from_cropped_files
+from lib.preprocess.cropping import get_patient_identifiers_from_cropped_files
 
 from batchgenerators.utilities.file_and_folder_operations import *
 
@@ -227,7 +227,7 @@ class DatasetAnalyzer(object):
 
         # get all classes and what classes are in what patients
         # class min size
-        # region size per class
+        # rregion size per class
         classes = self.get_classes()
         all_classes = [int(i) for i in classes.keys() if int(i) > 0]
 

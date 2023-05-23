@@ -13,7 +13,7 @@
 #    limitations under the License.
 
 from lib.utils import sum_tensor
-from lib.generic_UNet import softmax_helper
+from lib.train.generic_UNet import softmax_helper
 
 import torch
 from torch import nn

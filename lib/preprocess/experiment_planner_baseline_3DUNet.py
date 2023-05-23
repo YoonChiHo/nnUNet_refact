@@ -12,10 +12,10 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 from options import default_data_identifier
-from lib.utils_preprocess import get_pool_and_conv_props_poolLateV2
-from lib.generic_UNet import Generic_UNet
-from lib.cropping import get_case_identifier_from_npz
-from lib.preprocessing import GenericPreprocessor as preprocessor_class
+from lib.preprocess.utils_preprocess import get_pool_and_conv_props_poolLateV2
+from lib.preprocess.cropping import get_case_identifier_from_npz
+from lib.preprocess.preprocessing import GenericPreprocessor as preprocessor_class
+from lib.train.generic_UNet import Generic_UNet
 
 from batchgenerators.utilities.file_and_folder_operations import *
 

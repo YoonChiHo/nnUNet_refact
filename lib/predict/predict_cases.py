@@ -1,5 +1,5 @@
 from lib.trainer import nnUNetTrainer_simple
-from lib.segmentation_export import save_segmentation_nifti_from_softmax 
+from lib.predict.segmentation_export import save_segmentation_nifti_from_softmax 
 
 from batchgenerators.utilities.file_and_folder_operations import subfiles, subfolders, load_pickle
 

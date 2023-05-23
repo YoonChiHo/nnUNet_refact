@@ -2,7 +2,7 @@ import os
 
 from options import train_setting
 from lib.trainer import nnUNetTrainer_simple, load_pretrained_weights
-from lib.preprocess import preprocess
+from lib.preprocess.preprocess import preprocess
 
 from batchgenerators.utilities.file_and_folder_operations import load_pickle
 

@@ -12,11 +12,10 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-
-from lib.utils_preprocess import get_pool_and_conv_props_poolLateV2
-from lib.experiment_planner_baseline_3DUNet import ExperimentPlanner
-from lib.generic_UNet import Generic_UNet
 from options import default_data_identifier
+from lib.preprocess.experiment_planner_baseline_3DUNet import ExperimentPlanner
+from lib.preprocess.utils_preprocess import get_pool_and_conv_props
+from lib.train.generic_UNet import Generic_UNet
 
 import numpy as np
 import os
