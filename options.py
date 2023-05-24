@@ -8,12 +8,14 @@ default_output_folder = '/data/1_nnunet_refactoring/nnUNet_refact/Results'
 default_dataset_folder = '/data/1_nnunet_refactoring/nnUNet_refact/Dataset'
 default_preprocessed_folder = '/data/1_nnunet_refactoring/nnUNet_refact/Preprocessed'
 default_checkpoints_folder = '/data/1_nnunet_refactoring/nnUNet_refact/Checkpoints'
+format = 'nrrd'
 
 RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD = 3  # determines what threshold to use for resampling the low resolution axis
 
 def base_setting(parser):
-    parser.add_argument("-t", "--task", default= 'Task500_ISLES_ad')#required=True)
-    parser.add_argument('--network', help="2d, 3d_fullres. ",default="2d", required=False)
+    parser.add_argument("-t", "--task", default= 'Task502_TDSC_smallpatch')#required=True)
+    parser.add_argument('--network', help="2d, 3d_fullres. ",default="3d_fullres", required=False)
+    parser.add_argument("-g", "--gpus", default="2") #"0,1,2,3" "0"
 
     parser.add_argument("--default_dataset_folder", default= f'{default_dataset_folder}')#required=True)
     parser.add_argument("--default_preprocessed_folder", default= f'{default_preprocessed_folder}')#required=True)
@@ -25,7 +27,8 @@ def base_setting(parser):
 def preprocess_setting():
     parser = argparse.ArgumentParser()
     base_setting(parser)
-
+    parser.add_argument("--patchsize_3d", default = [80, 80, 80]) #None
+    parser.add_argument("--patchsize_2d", default = [224, 224]) #None
     parser.add_argument("-no_pp", action="store_true",
                         help="Set this flag if you dont want to run the preprocessing. If this is set then this script "
                              "will only run the experiment planning and create the plans file")
@@ -73,7 +76,6 @@ def train_setting():
     parser.add_argument("-d","--deterministic", default=True) #,action='store_true')#required=True)
     parser.add_argument("-c", "--continue_training", default=False, required=False)
     parser.add_argument("-vd", "--val_data", default=[], required=False)
-    parser.add_argument("-g", "--gpus", default="0") #"0,1,2,3" "0"
     parser.add_argument("-p", "--pretrained_weights", default=None) #"nnUNet_trained_models/nnUNet/3d_fullres/Task505_BRATS/nnUNetTrainerV2__nnUNetPlansv2.1/fold_0/model_final_checkpoint.model",
     #fixed parmeters
     parser.add_argument("--decompress_data", default=True) 
@@ -86,7 +88,7 @@ def test_setting():
 
     parser.add_argument("-i", '--input_name', default = "imagesTs")#, required=True)
     parser.add_argument('-o', "--output_name", default = "result_2d", required=False, help="folder for saving predictions")
-    parser.add_argument('-g', "--gt_name", default = "labelsTs",
+    parser.add_argument('-gt', "--gt_name", default = "labelsTs",
                      required=False, help="folder for saving predictions")
     parser.add_argument('-l', "--labels", default = [0, 1])
 #     parser.add_argument('-m', "--metrics", default = ["Dice"])

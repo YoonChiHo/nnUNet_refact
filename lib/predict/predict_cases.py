@@ -1,3 +1,4 @@
+from options import format
 from lib.trainer import nnUNetTrainer_simple
 from lib.predict.segmentation_export import save_segmentation_nifti_from_softmax 
 
@@ -42,9 +43,9 @@ def predict_cases(model, list_of_lists, output_filenames, folds, save_npz, num_t
         if len(dr) > 0:
             os.makedirs(dr, exist_ok=True)
             #maybe_mkdir_p(dr)
-        if not f.endswith(".nii.gz"):
+        if not f.endswith(f".{format}"):
             f, _ = os.path.splitext(f)
-            f = f + ".nii.gz"
+            f = f + f".{format}"
         cleaned_output_files.append(os.path.join(dr, f))
 
     if not overwrite_existing:
@@ -272,9 +273,9 @@ def preprocess_save_to_queue(preprocess_fn, q, list_of_lists, output_files, segs
 
 def check_input_folder_and_return_caseIDs(input_folder, expected_num_modalities):
     print("This model expects %d input modalities for each image" % expected_num_modalities)
-    files = subfiles(input_folder, suffix=".nii.gz", join=False, sort=True)
-
-    maybe_case_ids = np.unique([i[:-12] for i in files])
+    files = subfiles(input_folder, suffix=f".{format}", join=False, sort=True)
+    
+    maybe_case_ids = np.unique([i[:-6-len(format)] for i in files])
 
     remaining = deepcopy(files)
     missing = []
@@ -284,7 +285,7 @@ def check_input_folder_and_return_caseIDs(input_folder, expected_num_modalities)
     # now check if all required files are present and that no unexpected files are remaining
     for c in maybe_case_ids:
         for n in range(expected_num_modalities):
-            expected_output_file = c + "_%04.0d.nii.gz" % n
+            expected_output_file = c + f"_%04.0d.{format}" % n
             if not os.path.isfile(os.path.join(input_folder, expected_output_file)):
                 missing.append(expected_output_file)
             else:

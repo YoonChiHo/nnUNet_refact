@@ -29,12 +29,13 @@ class ExperimentPlanner3D_v21(ExperimentPlanner):
     We also increase the base_num_features to 32. This is solely because mixed precision training with 3D convs and
     amp is A LOT faster if the number of filters is divisible by 8
     """
-    def __init__(self, folder_with_cropped_data, preprocessed_output_folder):
+    def __init__(self, folder_with_cropped_data, preprocessed_output_folder, target_patchsize):
         super(ExperimentPlanner3D_v21, self).__init__(folder_with_cropped_data, preprocessed_output_folder)
         self.data_identifier = "nnUNetData_plans_v2.1"
         self.plans_fname = os.path.join(self.preprocessed_output_folder,
                                 "nnUNetPlansv2.1_plans_3D.pkl")
         self.unet_base_num_features = 32
+        self.target_patchsize = target_patchsize
 
     def get_target_spacing(self):
         """
@@ -114,8 +115,27 @@ class ExperimentPlanner3D_v21(ExperimentPlanner):
         shape_must_be_divisible_by = get_pool_and_conv_props(current_spacing, input_patch_size,
                                                              self.unet_featuremap_min_edge_length,
                                                              self.unet_max_numpool)
+        # CustomSetting
+        if self.target_patchsize != None:
+            for axis in range(3):
+                while new_shp[axis] > self.target_patchsize[axis]:
+                    tmp = deepcopy(new_shp)
+                    tmp[axis] -= shape_must_be_divisible_by[axis]
+                    _, _, _, _, shape_must_be_divisible_by_new = \
+                        get_pool_and_conv_props(current_spacing, tmp,
+                                                self.unet_featuremap_min_edge_length,
+                                                self.unet_max_numpool,
+                                                )
+                    new_shp[axis] -= shape_must_be_divisible_by_new[axis]
 
-        # we compute as if we were using only 30 feature maps. We can do that because fp16 training is the standard
+                    # we have to recompute numpool now:
+                    network_num_pool_per_axis, pool_op_kernel_sizes, conv_kernel_sizes, new_shp, \
+                    shape_must_be_divisible_by = get_pool_and_conv_props(current_spacing, new_shp,
+                                                                        self.unet_featuremap_min_edge_length,
+                                                                        self.unet_max_numpool,
+                                                                        )
+        
+        # we compute as if we were using only 30 feaimage.pngture maps. We can do that because fp16 training is the standard
         # now. That frees up some space. The decision to go with 32 is solely due to the speedup we get (non-multiples
         # of 8 are not supported in nvidia amp)
         ref = Generic_UNet.use_this_for_batch_size_computation_3D * self.unet_base_num_features / \
@@ -126,7 +146,7 @@ class ExperimentPlanner3D_v21(ExperimentPlanner):
                                                             num_classes,
                                                             pool_op_kernel_sizes, conv_per_stage=self.conv_per_stage)
         while here > ref:
-            axis_to_be_reduced = np.argsort(new_shp / new_median_shape)[-1]
+            axis_to_be_reduced = np.argsort(new_shp / new_median_shape)[-1] #가장 큰값 index 반환
 
             tmp = deepcopy(new_shp)
             tmp[axis_to_be_reduced] -= shape_must_be_divisible_by[axis_to_be_reduced]

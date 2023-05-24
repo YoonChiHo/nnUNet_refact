@@ -11,7 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-
+from options import format
 from lib.preprocess.utils_preprocess import create_lists_from_splitted_dataset
 
 from batchgenerators.utilities.file_and_folder_operations import *
@@ -68,7 +68,8 @@ def crop_to_bbox(image, bbox):
 
 
 def get_case_identifier(case):
-    case_identifier = case[0].split("/")[-1].split(".nii.gz")[0][:-5]
+    #case_identifier = case[0].split("/")[-1].split(".nii.gz")[0][:-5]
+    case_identifier = case[0].split("/")[-1].split(f'.{format}')[0][:1-len(format)]
     return case_identifier
 
 

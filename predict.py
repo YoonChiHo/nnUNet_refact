@@ -1,4 +1,4 @@
-from options import test_setting
+from options import test_setting, format
 from lib.predict.predict_cases import predict_cases, check_input_folder_and_return_caseIDs
 from lib.predict.evaluator import evaluate_folder
 
@@ -12,6 +12,9 @@ import os
 def main():
     #Main Parameter Settings
     args = test_setting().parse_args()
+
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpus # "0, 1, 2, 3"
 
     # if not args.task_name.startswith("Task"):
     #     task_id = int(args.task_name)
@@ -93,10 +96,10 @@ def main():
     # check input folder integrity
     case_ids = check_input_folder_and_return_caseIDs(input_folder_name, expected_num_modalities)
 
-    output_files = [os.path.join(output_folder_name, i + ".nii.gz") for i in case_ids]
-    all_files = subfiles(input_folder_name, suffix=".nii.gz", join=False, sort=True)
+    output_files = [os.path.join(output_folder_name, i + f".{format}") for i in case_ids]
+    all_files = subfiles(input_folder_name, suffix=f".{format}", join=False, sort=True)
     list_of_lists = [[os.path.join(input_folder_name, i) for i in all_files if i[:len(j)].startswith(j) and
-                        len(i) == (len(j) + 12)] for j in case_ids]
+                        len(i) == (len(j) + 6 + len(format))] for j in case_ids]
 
     # if lowres_segmentations is not None:
     #     assert isdir(lowres_segmentations), "if lowres_segmentations is not None then it must point to a directory"

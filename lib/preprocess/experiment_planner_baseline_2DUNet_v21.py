@@ -21,12 +21,13 @@ import numpy as np
 import os
 
 class ExperimentPlanner2D_v21(ExperimentPlanner2D):
-    def __init__(self, folder_with_cropped_data, preprocessed_output_folder):
+    def __init__(self, folder_with_cropped_data, preprocessed_output_folder, target_patchsize):
         super(ExperimentPlanner2D_v21, self).__init__(folder_with_cropped_data, preprocessed_output_folder)
         self.data_identifier = "nnUNetData_plans_v2.1_2D"
         self.plans_fname = os.path.join(self.preprocessed_output_folder,
                                 "nnUNetPlansv2.1_plans_2D.pkl")
         self.unet_base_num_features = 32
+        self.target_patchsize = target_patchsize
 
     def get_properties_for_stage(self, current_spacing, original_spacing, original_shape, num_cases,
                                  num_modalities, num_classes):
@@ -41,6 +42,24 @@ class ExperimentPlanner2D_v21(ExperimentPlanner2D):
                                                              self.unet_featuremap_min_edge_length,
                                                              self.unet_max_numpool)
 
+        # CustomSetting
+        if self.target_patchsize != None:
+            for axis in range(2):
+                while new_shp[axis] > self.target_patchsize[axis]:
+                    tmp = deepcopy(new_shp)
+                    tmp[axis] -= shape_must_be_divisible_by[axis]
+                    _, _, _, _, shape_must_be_divisible_by_new = \
+                        get_pool_and_conv_props(current_spacing[1:], tmp,
+                                                             self.unet_featuremap_min_edge_length,
+                                                             self.unet_max_numpool)
+                    new_shp[axis] -= shape_must_be_divisible_by_new[axis]
+
+                    # we have to recompute numpool now:
+                    network_num_pool_per_axis, pool_op_kernel_sizes, conv_kernel_sizes, new_shp, \
+                    shape_must_be_divisible_by = get_pool_and_conv_props(current_spacing[1:], new_shp,
+                                                             self.unet_featuremap_min_edge_length,
+                                                             self.unet_max_numpool)
+                    
         # we pretend to use 30 feature maps. This will yield the same configuration as in V1. The larger memory
         # footpring of 32 vs 30 is mor ethan offset by the fp16 training. We make fp16 training default
         # Reason for 32 vs 30 feature maps is that 32 is faster in fp16 training (because multiple of 8)

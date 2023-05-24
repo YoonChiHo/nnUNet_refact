@@ -3,6 +3,7 @@ from copy import deepcopy
 import os
 import json
 
+from options import format
 # separately (with NN)
 def get_pool_and_conv_props_poolLateV2(patch_size, min_feature_map_size, max_numpool, spacing):
     """
@@ -151,8 +152,11 @@ def create_lists_from_splitted_dataset(base_folder_splitted):
     for tr in training_files:
         cur_pat = []
         for mod in range(num_modalities):
-            cur_pat.append(os.path.join(base_folder_splitted, "imagesTr", tr['image'].split("/")[-1][:-7] +
-                                "_%04.0d.nii.gz" % mod))
+            cur_pat.append(os.path.join(base_folder_splitted, "imagesTr", tr['image'].split("/")[-1][:-1-len(format)] +
+                            "_%04.0d.%s" % (mod,format)))
+            
         cur_pat.append(os.path.join(base_folder_splitted, "labelsTr", tr['label'].split("/")[-1]))
         lists.append(cur_pat)
     return lists, {int(i): d['modality'][str(i)] for i in d['modality'].keys()}
+
+#nrrd(4) nii.gz(6)

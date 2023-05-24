@@ -12,7 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-
+from options import format
 from lib.predict.metrics import ConfusionMatrix, ALL_METRICS
 
 from batchgenerators.utilities.file_and_folder_operations import save_json, subfiles
@@ -454,8 +454,8 @@ def evaluate_folder(folder_with_gts: str, folder_with_predictions: str, labels: 
     :param labels: tuple of int with the labels in the dataset. For example (0, 1, 2, 3) for Task001_BrainTumour.
     :return:
     """
-    files_gt = subfiles(folder_with_gts, suffix=".nii.gz", join=False)
-    files_pred = subfiles(folder_with_predictions, suffix=".nii.gz", join=False)
+    files_gt = subfiles(folder_with_gts, suffix=f".{format}", join=False)
+    files_pred = subfiles(folder_with_predictions, suffix=f".{format}", join=False)
     assert all([i in files_pred for i in files_gt]), "files missing in folder_with_predictions"
     assert all([i in files_gt for i in files_pred]), "files missing in folder_with_gts"
     test_ref_pairs = [(os.path.join(folder_with_predictions, i), os.path.join(folder_with_gts, i)) for i in files_pred]
