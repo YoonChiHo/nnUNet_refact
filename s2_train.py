@@ -2,7 +2,7 @@ import os
 
 from options import train_setting
 from lib.trainer import nnUNetTrainer_simple, load_pretrained_weights
-from lib.preprocess.preprocess import preprocess
+#from lib.preprocess.preprocess import preprocess
 
 from batchgenerators.utilities.file_and_folder_operations import load_pickle
 
@@ -19,9 +19,9 @@ def main():
     # pych_Network Validate
     assert args.network in ['2d', '3d_fullres'], "network can only be one of the following: \'2d\',  \'3d_fullres\''"
 
-    # Data Preprocess
-    if args.do_preprocess:
-        preprocess()    
+    # # Data Preprocess
+    # if args.do_preprocess:
+    #     preprocess()    
 
     # Set Directory
     checkpoint_folder_name = os.path.join(args.default_checkpoints_folder, args.network, args.task)  

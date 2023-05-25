@@ -13,7 +13,7 @@ from typing import Tuple, List
 import os
 import numpy as np
 
-def preprocess():
+def main():
     #Main Parameter Settings
     args = preprocess_setting().parse_args()
 
@@ -176,3 +176,6 @@ def generate_dataset_json(output_file: str, imagesTr_dir: str, imagesTs_dir: str
         print("WARNING: output file name is not dataset.json! This may be intentional or not. You decide. "
               "Proceeding anyways...")
     save_json(json_dict, os.path.join(output_file), sort_keys=sort_keys)
+
+if __name__ == "__main__":
+    main()

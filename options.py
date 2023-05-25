@@ -14,7 +14,7 @@ RESAMPLING_SEPARATE_Z_ANISO_THRESHOLD = 3  # determines what threshold to use fo
 
 def base_setting(parser):
     parser.add_argument("-t", "--task", default= 'Task502_TDSC_smallpatch')#required=True)
-    parser.add_argument('--network', help="2d, 3d_fullres. ",default="3d_fullres", required=False)
+    parser.add_argument('--network', help="2d, 3d_fullres. ",default="2d", required=False)
     parser.add_argument("-g", "--gpus", default="2") #"0,1,2,3" "0"
 
     parser.add_argument("--default_dataset_folder", default= f'{default_dataset_folder}')#required=True)
@@ -69,8 +69,8 @@ def train_setting():
     parser = argparse.ArgumentParser()
     base_setting(parser)
 
-    parser.add_argument("--do_preprocess", default = True)
-    parser.add_argument("--max_epoch", default= 1)#required=True)
+    #parser.add_argument("--do_preprocess", default = True)
+    parser.add_argument("--max_epoch", default= 100)#required=True)
     parser.add_argument("--i_lr", default= 1e-2)#required=True)
     parser.add_argument("-f", "--fold", default= '0')#required=True)
     parser.add_argument("-d","--deterministic", default=True) #,action='store_true')#required=True)
